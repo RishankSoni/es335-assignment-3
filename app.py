@@ -27,7 +27,6 @@ def prepare_data(window_size):
     text = re.sub(r'\.', ' . ', text) # surround periods with spaces
     text = re.sub(r'\s+', ' ', text).strip() # collapse multiple spaces into one
     text = text.lower() # convert to lowercase
-    text = text[:len(text)//100]  # use only last 90% of the text
     paragraphs = text.split(' <eos> ')
     # words = [word for para in paragraphs for word in para.split() + ['<EOS>']]
     words = []
@@ -152,7 +151,7 @@ def generate_text(model, stoi, itos, block_size, device, start_context=None, max
 #file path for model
 file_path = 'my_model'
 models = {}
-folder_path = "/Users/rishanksoni/Downloads/MyModels"  # your folder name
+folder_path = "mymodels"  # your folder name
 
 # List all files in the folder
 files = os.listdir(folder_path)
@@ -186,8 +185,23 @@ print(model_params)
 # taking input from user
 st.title("Next Word Prediction Model")
 st.write("This app predicts the next word based on the input context using pre-trained models.")
+
+st.divider()
+
 st.subheader("Model Selection")
-model_choice = st.selectbox("Select a model", list(models.keys()))
+model_display_names = {
+    model_name: f"Block: {params[0]} | Emb: {params[1]} | Activation: {params[2].upper()} | Seed: {params[3]}"
+    for model_name, params in model_params.items()
+}
+
+selected_display = st.selectbox(
+    "Choose a model:",
+    list(model_display_names.values()),
+    help="Select based on context window, embedding size, activation function, and seed"
+)
+
+# Get the actual model name from the display name
+model_choice = [k for k, v in model_display_names.items() if v == selected_display][0]
 
 if model_choice:
     block_size, emb_dim, activation, seed = model_params[model_choice]
