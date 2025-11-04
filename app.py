@@ -190,7 +190,7 @@ st.divider()
 
 st.subheader("Model Selection")
 model_display_names = {
-    model_name: f"Block: {params[0]} | Emb: {params[1]} | Activation: {params[2].upper()} | Seed: {params[3]}"
+    model_name: f"Context Len: {params[0]} | Emb: {params[1]} | Activation: {params[2].upper()} | Seed: {params[3]}"
     for model_name, params in model_params.items()
 }
 
@@ -208,7 +208,7 @@ if model_choice:
     st.write("**Model Parameters:**")
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.metric("Block Size", block_size)
+        st.metric("Context Length", block_size)
     with col2:
         st.metric("Embedding Dim", emb_dim)
     with col3:
